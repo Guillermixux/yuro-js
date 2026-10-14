@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Rayos de sol -->
+  <g fill="#f59e0b" opacity="0.3">
+    <polygon points="256,0 276,200 236,200"/>
+    <polygon points="512,256 312,276 312,236"/>
+    <polygon points="256,512 236,312 276,312"/>
+    <polygon points="0,256 200,236 200,276"/>
+    <polygon points="437,75 310,190 290,170"/>
+    <polygon points="437,437 322,310 342,290"/>
+    <polygon points="75,437 190,322 170,342"/>
+    <polygon points="75,75 190,202 170,182"/>
+  </g>
+
+  <!-- Moneda -->
+  <circle cx="256" cy="256" r="220" fill="#b46405"/>
+  <circle cx="256" cy="256" r="200" fill="#f59e0b"/>
+  <circle cx="256" cy="256" r="180" fill="#fbbf24"/>
+
+  <!-- Degradado superior -->
+  <ellipse cx="256" cy="200" rx="160" ry="100" fill="#ffd550" opacity="0.6"/>
+
+  <!-- Euro (izquierda) -->
+  <g fill="none" stroke="#11131a" stroke-width="10" stroke-linecap="round">
+    <path d="M 120 230 Q 100 256 120 282"/>
+    <line x1="95" y1="240" x2="175" y2="240"/>
+    <line x1="95" y1="272" x2="175" y2="272"/>
+  </g>
+
+  <!-- Y central -->
+  <g fill="none" stroke="#11131a" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="175" y1="155" x2="256" y2="265"/>
+    <line x1="337" y1="155" x2="256" y2="265"/>
+    <line x1="256" y1="265" x2="256" y2="400"/>
+  </g>
+
+  <!-- Cent (derecha) -->
+  <g fill="none" stroke="#11131a" stroke-width="8" stroke-linecap="round">
+    <path d="M 352 275 Q 342 256 352 237"/>
+    <path d="M 352 237 Q 362 222 382 222"/>
+    <path d="M 382 222 Q 402 222 412 237"/>
+    <path d="M 412 237 Q 422 256 412 275"/>
+    <path d="M 412 275 Q 402 290 382 290"/>
+    <path d="M 382 290 Q 362 290 352 275"/>
+    <line x1="382" y1="210" x2="382" y2="305"/>
+  </g>
+</svg>

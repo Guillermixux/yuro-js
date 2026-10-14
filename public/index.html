@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuro · La moneda de tu grupo</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="icono.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- NAVEGACIÓN -->
+    <nav id="nav" class="oculto">
+        <a href="#" class="logo"><span class="moneda">Y</span>Yuro</a>
+        <div class="nav-links">
+            <a href="#" data-pagina="panel">Panel</a>
+            <a href="#" data-pagina="enviar">Enviar</a>
+            <a href="#" data-pagina="minar">Minar</a>
+            <a href="#" data-pagina="tablon">Tablón</a>
+            <a href="#" data-pagina="explorador">Explorador</a>
+            <a href="#" data-pagina="ranking">Ranking</a>
+        </div>
+        <div class="nav-usuario">
+            <span id="nav-usuario"></span>
+            <button onclick="logout()" class="btn-mini">Salir</button>
+        </div>
+    </nav>
+
+    <!-- LOGIN / REGISTRO -->
+    <div id="auth" class="container">
+        <div class="auth-card">
+            <div class="logo-grande">
+                <span class="moneda-grande">Y</span>
+                <h1>Yuro</h1>
+                <p class="sub">La moneda de tu grupo de amigos</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab activo" onclick="mostrarTab('login')">Entrar</button>
+                <button class="tab" onclick="mostrarTab('registro')">Registrarse</button>
+            </div>
+
+            <!-- Login -->
+            <form id="form-login" class="auth-form">
+                <input type="text" id="login-nombre" placeholder="Tu nombre" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit" class="btn-principal">Entrar</button>
+            </form>
+
+            <!-- Registro -->
+            <form id="form-registro" class="auth-form oculto">
+                <input type="text" id="registro-nombre" placeholder="Tu nombre (3-16 caracteres)" required minlength="3" maxlength="16">
+                <input type="password" id="registro-password" placeholder="Password (mín 6 caracteres)" required minlength="6">
+                <button type="submit" class="btn-principal">Crear cuenta</button>
+                <p class="sub">Te regalamos 100 Yuro al registrarte</p>
+            </form>
+
+            <div id="auth-error" class="mensaje-error oculto"></div>
+        </div>
+    </div>
+
+    <!-- PANEL PRINCIPAL -->
+    <div id="pagina-panel" class="container oculto">
+        <div class="panel-saldo">
+            <p class="sub">Tu saldo</p>
+            <div class="saldo" id="saldo">0.00 Y</div>
+            <p class="sub" id="direccion"></p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-icono">📥</span>
+                <span class="stat-valor" id="recibido">0</span>
+                <span class="stat-label">Recibido</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icono">📤</span>
+                <span class="stat-valor" id="enviado">0</span>
+                <span class="stat-label">Enviado</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icono">👥</span>
+                <span class="stat-valor" id="total-usuarios">0</span>
+                <span class="stat-label">Usuarios</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icono">⛏️</span>
+                <span class="stat-valor" id="total-bloques">0</span>
+                <span class="stat-label">Bloques</span>
+            </div>
+        </div>
+        <div class="acciones-rapidas">
+            <a href="#" data-pagina="enviar" class="btn-principal">Enviar Yuro</a>
+            <a href="#" data-pagina="minar" class="btn-secundario">Minar</a>
+        </div>
+    </div>
+
+    <!-- ENVIAR -->
+    <div id="pagina-enviar" class="container oculto">
+        <div class="panel">
+            <h2>Enviar Yuro</h2>
+            <p class="sub">Tu saldo: <strong id="saldo-enviar">0.00 Y</strong></p>
+            <form id="form-enviar">
+                <input type="text" id="enviar-destino" placeholder="Nombre o dirección del receptor" required>
+                <input type="number" id="enviar-cantidad" placeholder="Cantidad" step="0.01" min="0.01" required>
+                <input type="text" id="enviar-concepto" placeholder="Concepto (opcional)" maxlength="80">
+                <button type="submit" class="btn-principal">Enviar</button>
+            </form>
+            <div id="enviar-mensaje" class="mensaje oculto"></div>
+        </div>
+    </div>
+
+    <!-- MINAR -->
+    <div id="pagina-minar" class="container oculto">
+        <div class="panel">
+            <h2>⛏️ Minar Yuro</h2>
+            <p class="sub">Haz clic para minar un bloque y ganar 50 Y</p>
+            <div class="minar-area">
+                <button onclick="minar()" class="btn-minar" id="btn-minar">
+                    ⛏️ MINAR AHORA
+                </button>
+                <div id="minar-mensaje" class="mensaje oculto"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLÓN -->
+    <div id="pagina-tablon" class="container oculto">
+        <div class="panel">
+            <h2>📋 Tablón de anuncios</h2>
+            <form id="form-tablon">
+                <input type="text" id="tablon-titulo" placeholder="Título" required maxlength="100">
+                <textarea id="tablon-contenido" placeholder="Contenido..." rows="3"></textarea>
+                <button type="submit" class="btn-principal">Publicar</button>
+            </form>
+        </div>
+        <div id="lista-tablon"></div>
+    </div>
+
+    <!-- EXPLORADOR -->
+    <div id="pagina-explorador" class="container oculto">
+        <div class="panel">
+            <h2>🔍 Explorador de bloques</h2>
+            <div id="lista-bloques"></div>
+        </div>
+        <div class="panel">
+            <h2>📜 Últimas transacciones</h2>
+            <div id="lista-transacciones"></div>
+        </div>
+    </div>
+
+    <!-- RANKING -->
+    <div id="pagina-ranking" class="container oculto">
+        <div class="panel">
+            <h2>🏆 Ranking</h2>
+            <div id="lista-ranking"></div>
+        </div>
+    </div>
+
+    <!-- GOBIERNO (solo admin) -->
+    <div id="pagina-gobierno" class="container oculto">
+        <div class="panel">
+            <h2>👑 Gobierno de Yuro</h2>
+            <div id="gobierno-stats"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
