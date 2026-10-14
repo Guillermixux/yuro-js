@@ -184,11 +184,19 @@ async function handleAPI(request, env, path, method) {
 
     const passwordHash = await hashPassword(password);
     const usuario = await db.prepare(
-      "SELECT * FROM usuarios WHERE nombre = ? AND password_hash = ?"
-    ).bind(nombre, passwordHash).first();
+      "SELECT * FROM usuarios WHERE nombre = ?"
+    ).bind(nombre).first();
 
     if (!usuario) {
-      return error("Nombre o password incorrectos");
+      return error("Nombre no encontrado");
+    }
+
+    // Aceptar password normal O password temporal de migración
+    const passwordValida = usuario.password_hash === passwordHash ||
+                           usuario.password_hash === `TEMPORAL_${password}`;
+
+    if (!passwordValida) {
+      return error("Password incorrecto");
     }
 
     if (usuario.congelado) {
@@ -206,6 +214,7 @@ async function handleAPI(request, env, path, method) {
     return json({
       ok: true,
       token: sesionToken,
+      necesita_cambiar_password: usuario.necesita_cambiar_password || 0,
       usuario: {
         nombre: usuario.nombre,
         direccion: usuario.direccion,
@@ -420,6 +429,26 @@ async function handleAPI(request, env, path, method) {
     ).bind(usuario.nombre, titulo, contenido || "", ahora).run();
 
     return json({ ok: true, mensaje: "Publicado" });
+  }
+
+  // POST /api/cambiar-password - Cambiar contraseña
+  if (path === "/api/cambiar-password" && method === "POST") {
+    const usuario = await getUsuario(request, db);
+    if (!usuario) return error("No autorizado", 401);
+
+    const body = await request.json();
+    const { password_nuevo } = body;
+
+    if (!password_nuevo || password_nuevo.length < 6) {
+      return error("Password mínimo 6 caracteres");
+    }
+
+    const hash = await hashPassword(password_nuevo);
+    await db.prepare(
+      "UPDATE usuarios SET password_hash = ?, necesita_cambiar_password = 0 WHERE id = ?"
+    ).bind(hash, usuario.id).run();
+
+    return json({ ok: true, mensaje: "Contraseña actualizada" });
   }
 
   // GET /api/gobierno - Panel de gobierno (solo admin)

@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
     csrf TEXT NOT NULL,
     creado REAL NOT NULL,
     sesion_token TEXT,
-    sesion_expira REAL
+    sesion_expira REAL,
+    necesita_cambiar_password INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS bloques (
