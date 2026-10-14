@@ -1,18 +1,11 @@
 name = "yuro"
 main = "src/index.js"
-compatibility_date = "2024-01-01"
+compatibility_date = "2024-09-23"
 
-[build]
-command = ""
-upload_dir = "public"
+# Sirve archivos estáticos desde /public
+[assets]
+directory = "./public"
+binding = "ASSETS"
 
 [vars]
 NOMBRE_MONEDA = "Yuro"
-
-# Para la base de datos D1, ejecuta después de crearla:
-# wrangler d1 execute yuro --file=./schema.sql
-# y añade el ID en:
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "yuro"
-# database_id = "TU_DATABASE_ID"

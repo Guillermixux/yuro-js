@@ -84,7 +84,7 @@ export default {
       }
 
       // ========== Static Files (sirve el frontend) ==========
-      return await handleStatic(path);
+      return await handleStatic(path, env);
     } catch (e) {
       return error("Error interno: " + e.message, 500);
     }
@@ -486,10 +486,19 @@ async function getSaldo(db, direccion) {
 
 // ==================== STATIC FILES ====================
 
-async function handleStatic(path) {
-  // En producción, Cloudflare sirve los archivos estáticos automáticamente
-  // Este es un fallback para desarrollo
-  return new Response("Yuro API - Usa /api/ para los endpoints", {
-    headers: { "Content-Type": "text/plain" }
-  });
+async function handleStatic(path, env) {
+  // Si hay un archivo estático, servirlo
+  if (env.ASSETS) {
+    const asset = await env.ASSETS.fetch(new Request(path));
+    if (asset.status === 200) {
+      return asset;
+    }
+  }
+
+  // Si no, servir index.html (SPA)
+  if (env.ASSETS) {
+    return env.ASSETS.fetch(new Request("/index.html"));
+  }
+
+  return new Response("Yuro", { headers: { "Content-Type": "text/plain" } });
 }
